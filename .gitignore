@@ -1,0 +1,4 @@
+test.py
+.env
+instance/
+__pycache__/
