@@ -3,13 +3,9 @@ from src.constants.HTTP_STATUS_CODES import *
 from src.database import db, User
 import validators
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_jwt_extended import create_access_token, create_refresh_token
+from flask_jwt_extended import create_access_token, create_refresh_token, jwt_required, get_jwt_identity
 
 auth = Blueprint("auth", __name__, url_prefix="/api/v1/auth")
-
-@auth.get("/me")
-def index():
-    return {"Message": "User created"}
 
 @auth.post("/register")
 def register():
@@ -62,3 +58,23 @@ def login():
         else:
             return jsonify({"error": "email does not exist"}), HTTP_404_NOT_FOUND
         
+
+@auth.post("/me")
+@jwt_required()
+def refresh():
+    user_id = get_jwt_identity()
+    print(user_id)
+    user = User.query.filter_by(id=user_id).first()
+    if user:
+        return jsonify({"user": {"username": user.username,
+                                 "email": user.email}}), HTTP_200_OK
+    else:
+        return jsonify({"error": "This user does not exist"}), HTTP_404_NOT_FOUND
+    
+
+@auth.post("/token/refresh")
+@jwt_required(refresh=True)
+def refresh_user_token():
+    user_id = get_jwt_identity()
+    access = create_access_token(identity=user_id)
+    return jsonify({"access_token": access})
