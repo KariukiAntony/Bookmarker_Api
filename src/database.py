@@ -4,6 +4,7 @@ import string
 import random
 
 db = SQLAlchemy()
+# short_url = db.Column(db.String(3), nullable=False)
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -35,10 +36,7 @@ class Bookmark(db.Model):
             self.generate_unique_characters()
         else:
             return joined_char
-        
-    def __init__(self, ):
-        self.short_url = self.generate_unique_characters()
 
-    # def __init__(self, **kwargs):
-    #     super().__init__(**kwargs)
-    #     self.short_url = self.generate_unique_characters()
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.short_url = self.generate_unique_characters()
