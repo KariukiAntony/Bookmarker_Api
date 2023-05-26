@@ -36,9 +36,11 @@ def handle_bookmarks():
                         "updated_at": bookmark.updated_at}), HTTP_201_CREATED
     
     elif request.method == "GET":
-        bookmarks = Bookmark.query.filter_by(user_id=user_id).all()
+        page = request.args.get("page", 2, type=int)
+        per_page = request.args.get("pages", 1, type=int)
+        bookmarks = Bookmark.query.filter_by(user_id=user_id).paginate(page=page, per_page=per_page,error_out=False)
         serialized = []
-        for bookmark in bookmarks:
+        for bookmark in bookmarks.items:
             serialized.append({"id":bookmark.id,
                                "body": bookmark.body,
                                 "url": bookmark.url, 
@@ -46,7 +48,33 @@ def handle_bookmarks():
                                 "visits": bookmark.visits,
                                 "created_at": bookmark.created_at, 
                                 "updated_at": bookmark.updated_at})
-        return jsonify(serialized), HTTP_200_OK
+        meta = {"page": bookmarks.page,
+                "pages": bookmarks.pages,
+                "items_per_page": bookmarks.per_page,
+                "prev_pages":bookmarks.prev_num,
+                "next_pages": bookmarks.next_num,
+                "total_count": bookmarks.total,
+                "has_prev": bookmarks.has_prev,
+                "has_next": bookmarks.has_next
+                }
+        return jsonify(serialized, {"meta": meta}), HTTP_200_OK
+    
+@Bookmarks.route("/<int:id>")
+@jwt_required()
+def get_bookmark(id):
+    user_id = get_jwt_identity()
+    bookmark = Bookmark.query.filter_by(id=id).first()
+    if not bookmark:
+        return jsonify({"error": "bookmark with this id does not exist"}), HTTP_404_NOT_FOUND
+    else:
+        print(bookmark.created_at)
+        return jsonify({"id":bookmark.id,
+                            "body": bookmark.body,
+                            "url": bookmark.url, 
+                            "short_url": bookmark.short_url,
+                            "visits": bookmark.visits,
+                            "created_at": bookmark.created_at, 
+                            "updated_at": bookmark.updated_at})
 
 
 
