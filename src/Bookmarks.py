@@ -63,7 +63,7 @@ def handle_bookmarks():
 @jwt_required()
 def get_bookmark(id):
     user_id = get_jwt_identity()
-    bookmark = Bookmark.query.filter_by(id=id).first()
+    bookmark = Bookmark.query.filter_by(user_id=user_id, id=id).first()
     if not bookmark:
         return jsonify({"error": "bookmark with this id does not exist"}), HTTP_404_NOT_FOUND
     else:
