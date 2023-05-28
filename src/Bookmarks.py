@@ -102,4 +102,17 @@ def edit_bookmarks(id):
                         "created_at": bookmark.created_at,
                         "updated_at": bookmark.updated_at}), HTTP_200_OK
 
+@Bookmarks.delete("/<int:id>")
+@jwt_required()
+def delete_bookmark(id):
+    user_id = get_jwt_identity()
+    bookmark = Bookmark.query.filter_by(user_id=user_id, id=id).first()
+    if not bookmark:
+        return jsonify({"error": "bookmark with the id does not exist"}), HTTP_404_NOT_FOUND
+    else:
+        db.session.delete(bookmark)
+        db.session.commit()
+        return   "", HTTP_204_NO_CONTENT
+
+
     
