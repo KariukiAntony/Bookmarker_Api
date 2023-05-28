@@ -36,8 +36,8 @@ def handle_bookmarks():
                         "updated_at": bookmark.updated_at}), HTTP_201_CREATED
     
     elif request.method == "GET":
-        page = request.args.get("page", 2, type=int)
-        per_page = request.args.get("pages", 1, type=int)
+        page = request.args.get("page", 1, type=int)
+        per_page = request.args.get("pages", 5, type=int)
         bookmarks = Bookmark.query.filter_by(user_id=user_id).paginate(page=page, per_page=per_page,error_out=False)
         serialized = []
         for bookmark in bookmarks.items:
@@ -75,7 +75,31 @@ def get_bookmark(id):
                             "visits": bookmark.visits,
                             "created_at": bookmark.created_at, 
                             "updated_at": bookmark.updated_at})
+    
 
+@Bookmarks.put("/<int:id>")
+@Bookmarks.patch("/<int:id>")
+@jwt_required()
+def edit_bookmarks(id):
+    user_id = get_jwt_identity()
+    body = request.json.get("body")
+    url = request.json.get("url")
+    bookmark = Bookmark.query.filter_by(user_id=user_id, id=id).first()
+    if not bookmark:
+        return jsonify({"error": "bookmark does not exist"}), HTTP_404_NOT_FOUND
+    if not validators.url(url):
+        return jsonify({"error": "Invalid url"}), HTTP_400_BAD_REQUEST
+    else:
+        bookmark.body = body
+        bookmark.url = url
+        db.session.commit()
 
+        return jsonify({"id": id,
+                        "url":bookmark.url,
+                        "body": bookmark.body,
+                        "short_url": bookmark.short_url,
+                        "visits": bookmark.visits,
+                        "created_at": bookmark.created_at,
+                        "updated_at": bookmark.updated_at}), HTTP_200_OK
 
     
