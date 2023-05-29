@@ -4,7 +4,6 @@ import string
 import random
 
 db = SQLAlchemy()
-# short_url = db.Column(db.String(3), nullable=False)
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
