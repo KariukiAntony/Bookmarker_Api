@@ -3,7 +3,7 @@ from src.auth import auth
 from src.Bookmarks import Bookmarks
 from src.database import db, Bookmark
 import os
-from flask_jwt_extended import JWTManager
+from flask_jwt_extended import JWTManager, jwt_required, get_jwt_identity
 from src.constants.HTTP_STATUS_CODES import *
 
 
@@ -35,6 +35,21 @@ def create_app(test_config=None):
             bookmark.visits = bookmark.visits +1
             db.session.commit()
             return redirect(bookmark.url)
+        
+    @app.get("/stats")
+    @jwt_required()
+    def bookmark_stats():
+        user_id = get_jwt_identity()
+        items = Bookmark.query.filter_by(user_id=user_id).all()
+        data = []
+        for item in items:
+            stats = {"id": item.id,
+                     "url": item.url,
+                     "short_url": item.short_url,
+                     "visits": item.visits}
+            data.append(stats)
+        return jsonify({"data": data}), HTTP_200_OK
+    
         
     @app.errorhandler(HTTP_404_NOT_FOUND)
     def handle_404(e):

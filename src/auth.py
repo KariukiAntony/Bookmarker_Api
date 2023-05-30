@@ -59,7 +59,7 @@ def login():
             return jsonify({"error": "email does not exist"}), HTTP_404_NOT_FOUND
         
 
-@auth.post("/me")
+@auth.get("/me")
 @jwt_required()
 def refresh():
     user_id = get_jwt_identity()
