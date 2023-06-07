@@ -5,6 +5,8 @@ from src.database import db, Bookmark
 import os
 from flask_jwt_extended import JWTManager, jwt_required, get_jwt_identity
 from src.constants.HTTP_STATUS_CODES import *
+from flasgger import Swagger, swag_from
+from src.config.swagger import template, swagger_config
 
 
 def create_app(test_config=None):
@@ -13,12 +15,14 @@ def create_app(test_config=None):
         app.config.from_mapping(SECRET_KEY=os.environ.get("SECRET_KEY"),
                                 SQLALCHEMY_DATABASE_URI =os.environ.get("S_D_U"),
                                 SQLALCHEMY_TRACK_MODIFICATION = False,
-                                JWT_SECRET_KEY = os.environ.get("jwt_key")
+                                JWT_SECRET_KEY = os.environ.get("jwt_key"),
+                                SWAGGER={"title": "Bookmarks API", 
+                                         "uiversion": 3}
                                 )
     else:
         app.config.from_mapping(test_config)
 
-    
+    Swagger(app, config=swagger_config, template=template)
     db.init_app(app)
     JWTManager(app)
     # with app.app_context():
@@ -28,6 +32,7 @@ def create_app(test_config=None):
     app.register_blueprint(Bookmarks)
 
     @app.get("/<short_url>")
+    @swag_from("./docs/short_url.yaml")
     def redirect_url(short_url):
         bookmark = Bookmark.query.filter_by(short_url=short_url).first_or_404()
         if bookmark:

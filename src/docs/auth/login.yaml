@@ -1,0 +1,32 @@
+User login
+
+---
+tags:
+  - Authorization
+
+parameters:
+  - name: body
+    description: the body should contain user login credentials
+    in: body
+    required: true
+    schema:
+      type: object
+      required:
+        - "email"
+        - "email"
+      properties:
+        email:
+          type: "email"
+          example: "email@gmail.com"
+        password:
+          type: "string"
+          example: "...."
+        
+
+responses:
+  200:
+    description: user has sign-in successfully 
+  401:
+    description: user is unauthorized
+  400:
+    description: user have given invalid credentials

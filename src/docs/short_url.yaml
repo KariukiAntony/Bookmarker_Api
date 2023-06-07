@@ -1,0 +1,14 @@
+Redirects to a real URL
+---
+tags:
+  - Bookmarks
+parameters:
+  - in: path
+    name: short_url
+    required: true
+responses:
+  302:
+    description: Redirect pamanently
+  404:
+    description: url not found
+

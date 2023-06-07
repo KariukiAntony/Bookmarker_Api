@@ -1,0 +1,36 @@
+User registration
+
+---
+tags:
+  - Authorization
+
+parameters:
+  - name: body
+    description: the body should contain user registration credentials
+    in: body
+    required: true
+    schema:
+      type: object
+      required:
+        - "email"
+        - "username"
+        - "email"
+      properties:
+        email:
+          type: "email"
+          example: "email@gmail.com"
+        username:
+          type: username
+          example: "username"
+        password:
+          type: "string"
+          example: "...."
+        
+
+responses:
+  201:
+    description: user account have been created successfully
+  400:
+    description: user have given invalid credentials
+  409:
+    description: user credentials already exist
