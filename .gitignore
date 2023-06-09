@@ -2,3 +2,4 @@ test.py
 .env
 instance/
 __pycache__/
+.vscode

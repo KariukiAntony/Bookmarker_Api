@@ -65,7 +65,7 @@ def get_bookmark(id):
     user_id = get_jwt_identity()
     bookmark = Bookmark.query.filter_by(user_id=user_id, id=id).first()
     if not bookmark:
-        return jsonify({"error": "bookmark with this id does not exist"}), HTTP_404_NOT_FOUND
+        return jsonify({"error": "bookmark with this id does not exist"}), HTTP_404_NOT_FOUNDfont
     else:
         print(bookmark.created_at)
         return jsonify({"id":bookmark.id,

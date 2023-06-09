@@ -43,6 +43,7 @@ def create_app(test_config=None):
         
     @app.get("/stats")
     @jwt_required()
+    @swag_from("./docs/bookmarks/stats.yaml")
     def bookmark_stats():
         user_id = get_jwt_identity()
         items = Bookmark.query.filter_by(user_id=user_id).all()

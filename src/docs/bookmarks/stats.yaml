@@ -1,0 +1,13 @@
+bookmark statistics
+
+---
+tags:
+ -  Bookmarks
+
+responses:
+  200:
+    description: bookmarks stats
+  401:
+    description: fails to get stats due to unauthorization   
+
+
