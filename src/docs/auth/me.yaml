@@ -10,7 +10,7 @@ parameters:
    name: Authorization
    required: true
 
-responses:#/Authorization/get_auth_me
+responses:
   200:
     description: user gets personal credentials
   401:
