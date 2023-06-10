@@ -4,6 +4,11 @@ bookmark statistics
 tags:
  -  Bookmarks
 
+parameters:
+  - in: body
+    name: Autorization
+    required: true
+
 responses:
   200:
     description: bookmarks stats

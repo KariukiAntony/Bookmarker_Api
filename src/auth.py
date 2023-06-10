@@ -64,6 +64,7 @@ def login():
 
 @auth.get("/me")
 @jwt_required()
+@swag_from("./docs/auth/me.yaml")
 def refresh():
     user_id = get_jwt_identity()
     print(user_id)

@@ -13,7 +13,7 @@ parameters:
       type: object
       required:
         - "email"
-        - "email"
+        - "password"
       properties:
         email:
           type: "email"

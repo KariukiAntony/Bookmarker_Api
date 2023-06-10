@@ -1,0 +1,17 @@
+gives the user credentials
+
+---
+
+tags:
+ -  Authorization
+
+parameters:
+ - in: body
+   name: Authorization
+   required: true
+
+responses:#/Authorization/get_auth_me
+  200:
+    description: user gets personal credentials
+  401:
+    description: user fails to get credentials due to unauthorization
