@@ -1,0 +1,32 @@
+version: "3.8"
+services:
+  APi:
+    image: kariukiantony/bookmarker
+    container_name: bookmarker_cont
+    build: .
+    ports:
+      - "5000:5000"
+    depends_on:
+      - database
+
+    environment:
+      - SECRET_KEY = 75f94f566d90fd882367
+      - SQLALCHEMY_DATABASE_URI = postgresql://postgres:postgres@db
+      - SQLALCHEMY_TRACK_MODIFICATIONS = False
+      - JWT_SECRET_KEY = 0a1d1f1175b08c43c431841667150e
+  
+  database:
+    image: postgres:12
+    container_name: database
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
+
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+  
+  volumes:
+   pgdata: {}
