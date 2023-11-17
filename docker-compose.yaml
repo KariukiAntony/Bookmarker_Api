@@ -11,7 +11,7 @@ services:
 
     environment:
       - SECRET_KEY = 75f94f566d90fd882367
-      - SQLALCHEMY_DATABASE_URI = postgresql://postgres:postgres@db:5432/postgres
+      - SQLALCHEMY_DATABASE_URI = postgresql://postgres:postgres@database:5432/postgres
       - SQLALCHEMY_TRACK_MODIFICATIONS = False
       - JWT_SECRET_KEY = 0a1d1f1175b08c43c431841667150e
   
