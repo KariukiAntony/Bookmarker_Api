@@ -11,7 +11,6 @@ from src.config.swagger import template, swagger_config
 
 def create_app(test_config=None):
     app = Flask(__name__)
-    print(os.getenv("S_D_U"))
     if test_config is None:
         app.config.from_mapping(SECRET_KEY=os.environ.get("SECRET_KEY"),
                                 SQLALCHEMY_DATABASE_URI =os.environ.get("S_D_U"),
